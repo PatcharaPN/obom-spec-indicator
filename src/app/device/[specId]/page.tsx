@@ -6,6 +6,7 @@ type DeviceInfo = {
   name: string;
   department: string;
   owner: string;
+  imgurl: string;
   employeeId: string;
   spec: string[];
 };
@@ -36,6 +37,7 @@ const deviceMap: Record<string, DeviceInfo> = {
     department: "Sales Support",
     owner: "มาย",
     employeeId: "006",
+    imgurl: "/Employee/006.png",
     spec: [
       "CPU: Ryzen 3 4200GE",
       "Mainboard: A520M-A Prime",
@@ -44,6 +46,77 @@ const deviceMap: Record<string, DeviceInfo> = {
       "Power: 550W",
     ],
   },
+  "OBOM-AC-002": {
+    name: "ทิวาพร สนจิตร์ (เหมี่ยว)",
+    department: "Accounting",
+    owner: "เหมียว",
+    employeeId: "021",
+    imgurl: "/Employee/021.png",
+    spec: [
+      "CPU: Ryzen 3 4300GE",
+      "Mainboard: A320",
+      "RAM: DDR4 8GB bus 2666MHz",
+      "VGA: Onboard Radeon Vega 6",
+      "Power: 450W",
+    ],
+  },
+  "OBOM-DS-003": {
+    name: "สามารถ อุทาโย (มาส)",
+    department: "Design",
+    owner: "อุทาโย",
+    employeeId: "011",
+    imgurl: "/Employee/011.png",
+    spec: [
+      "CPU: Intel Core i5-12400F",
+      "Mainboard: ASUS H110M-K",
+      "RAM: DDR4 16GB bus 2666MHz",
+      "VGA: NVIDIA Quadro T1000",
+      "Power: 650W",
+    ],
+  },
+  "OBOM-DS-004": {
+    name: "ชยิน (จิ๋ว)",
+    department: "Design",
+    owner: "เอกภัทรกุลชัย",
+    employeeId: "059",
+    imgurl: "/Employee/059.png",
+    spec: [
+      "CPU: Intel Core i5-8400",
+      "Mainboard: ASUS PRIME B360M-A",
+      "RAM: DDR4 16GB bus 2666MHz",
+      "VGA: NVIDIA RTX 2060",
+      "Power: 550W 80+ Bronze",
+    ],
+  },
+  "OBOM-SS-005": {
+    name: "วรกมล (เฟริน)",
+    department: "Sales Support",
+    owner: "อินทรประสิทธิ์",
+    employeeId: "061",
+    imgurl: "/Employee/061.png",
+    spec: [
+      "CPU: AMD Athlon 200GE",
+      "Mainboard: Gigabyte A320M-S2H V2-CF",
+      "RAM: DDR4 4GB bus 2400MHz",
+      "VGA: Integrated Radeon Vega 3",
+      "Power: 300W",
+    ],
+  },
+  "OBOM-CNC-006": {
+    name: "ทนงศักดิ์ สุนธลูน (ตุ๊)",
+    department: "CNC",
+    owner: "สุนธลูน",
+    imgurl: "/Employee/023.png",
+    employeeId: "023",
+    spec: [
+      "CPU: Intel Core i5-4460",
+      "Mainboard: ASUS B85M ",
+      "RAM: DDR3 8GB",
+      "VGA: NVIDIA GTX 950 2GB",
+      "Power: 550W",
+    ],
+  },
+
   // เพิ่มเครื่องอื่น ๆ ได้ในโครงสร้างเดียวกัน
 };
 function getDeviceBySpecId(
@@ -72,12 +145,7 @@ export default function DevicePage() {
         <h2 className="text-xl font-semibold mb-10">ID: {params.specId}</h2>{" "}
         <div className="flex gap-5 mb-15">
           <div>
-            <Image
-              src={"/Employee/006.png"}
-              width={100}
-              height={100}
-              alt={""}
-            />
+            <Image src={device.imgurl} width={100} height={100} alt={""} />
           </div>
           <div className="flex flex-col gap-2">
             <h1>ผู้ดูแล: {device.name}</h1>
