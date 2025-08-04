@@ -1,6 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
-
+import Image from "next/image";
+import { Icon } from "@iconify/react";
 type DeviceInfo = {
   name: string;
   department: string;
@@ -31,10 +32,10 @@ type DeviceInfo = {
 // };
 const deviceMap: Record<string, DeviceInfo> = {
   "OBOM-SS-001": {
-    name: "เครื่องพี่มาย",
+    name: "วิภาดา คุณโฑ",
     department: "Sales Support",
-    owner: "พี่มาย",
-    employeeId: "EMP001",
+    owner: "มาย",
+    employeeId: "006",
     spec: [
       "CPU: Ryzen 3 4200GE",
       "Mainboard: A520M-A Prime",
@@ -63,14 +64,38 @@ export default function DevicePage() {
   }
 
   return (
-    <div className="flex justify-center font-sans items-center  min-h-screen p-8 pb-20 gap-4 sm:p-20">
-      <div className="w-90 h-90 flex justify-center items-center">
-        <div className="">
-          <h1>ผู้ดูแล: {device.name}</h1>
-          <p>แผนก: {device.department}</p>
-          <p>ชื่อผู้รับ: {device.owner}</p>
-          <p>รหัสพนักงาน: {device.employeeId}</p>
-          <p>สเปค:</p>
+    <div
+      style={{ backgroundImage: 'url("/bg.png")' }}
+      className="flex justify-center font-sans items-center  min-h-screen p-8 pb-20 gap-4 sm:p-20 "
+    >
+      <div className="p-10 w-90 h-fit justify-center items-center border border-blue-400 rounded-xl shadow-2xl">
+        <h2 className="text-xl font-semibold mb-10">ID: {params.specId}</h2>{" "}
+        <div className="flex gap-5 mb-15">
+          <div>
+            <Image
+              src={"/Employee/006.png"}
+              width={100}
+              height={100}
+              alt={""}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <h1>ผู้ดูแล: {device.name}</h1>
+            <p>แผนก: {device.department}</p>
+            <p>รหัสพนักงาน: {device.employeeId}</p>
+          </div>
+        </div>
+        <div>
+          {" "}
+          <div className="flex items-center gap-1">
+            {" "}
+            <Icon
+              icon="famicons:hardware-chip-outline"
+              width="25"
+              height="25"
+            />
+            <p>สเปค:</p>
+          </div>
           <ul className="list-disc list-inside mt-2 text-left">
             {device.spec.map((line, index) => (
               <li key={index}>{line}</li>
