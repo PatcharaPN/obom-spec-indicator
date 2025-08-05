@@ -56,6 +56,7 @@ const deviceMap: Record<string, DeviceInfo> = {
       "RAM: DDR4 8GB bus 2666",
       "VGA: Onboard Radeon Vega",
       "Power: 550W",
+      "OS: Windows 10",
     ],
   },
   "OBOM-AC-002": {
@@ -70,6 +71,7 @@ const deviceMap: Record<string, DeviceInfo> = {
       "RAM: DDR4 8GB bus 2666MHz",
       "VGA: Onboard Radeon Vega 6",
       "Power: 450W",
+      "OS: Windows 10",
     ],
   },
   "OBOM-DS-003": {
@@ -84,6 +86,7 @@ const deviceMap: Record<string, DeviceInfo> = {
       "RAM: DDR4 16GB bus 2666MHz",
       "VGA: NVIDIA Quadro T1000",
       "Power: 650W",
+      "OS: Windows 10",
     ],
     repairs: [
       {
@@ -107,6 +110,7 @@ const deviceMap: Record<string, DeviceInfo> = {
       "RAM: DDR4 16GB bus 2666MHz",
       "VGA: NVIDIA RTX 2060",
       "Power: 550W 80+ Bronze",
+      "OS: Windows 11",
     ],
   },
   "OBOM-SS-005": {
@@ -121,6 +125,7 @@ const deviceMap: Record<string, DeviceInfo> = {
       "RAM: DDR4 4GB bus 2400MHz",
       "VGA: Integrated Radeon Vega 3",
       "Power: 300W",
+      "OS: Windows 10",
     ],
   },
   "OBOM-CNC-006": {
@@ -135,6 +140,7 @@ const deviceMap: Record<string, DeviceInfo> = {
       "RAM: DDR3 8GB",
       "VGA: NVIDIA GTX 950 2GB",
       "Power: 550W",
+      "OS: Windows 10",
     ],
   },
   "OBOM-SV-007": {
@@ -148,6 +154,34 @@ const deviceMap: Record<string, DeviceInfo> = {
       "RAM: 8GB",
       "VGA: NVIDIA GeForce GT 730",
       "OS: Ubuntu 24.04.2 LTS x86_64",
+    ],
+  },
+  "OBOM-PL-008": {
+    name: "พีรญา (นิด)",
+    department: "Planning",
+    owner: "ปานนะลา",
+    imgurl: "/Employee/008.png",
+    employeeId: "008",
+    spec: [
+      "CPU: Intel i5-9400F",
+      "Mainboard: ASUS PRIME B365M",
+      "RAM: 16GB DDR4 2400MHz",
+      "VGA: NVIDIA GeForce GTX 1650 4GB",
+      "Power: 550W",
+    ],
+  },
+  "OBOM-PL-009": {
+    name: "ฐิตาภา (กานต์)",
+    department: "Planning",
+    owner: "เรืองภู",
+    imgurl: "/Employee/010.png",
+    employeeId: "010",
+    spec: [
+      "CPU: Intel i3-5005U (2C/4T @ 2.0GHz)",
+      "Mainboard: OEM Notebook Board (Integrated)",
+      "RAM: 4GB DDR4 800MHz",
+      "VGA: Integrated Intel HD Graphics 5500",
+      "Power: 65W Adapter",
     ],
   },
 
