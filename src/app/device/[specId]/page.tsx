@@ -18,6 +18,8 @@ type DeviceInfo = {
 type RepairItem = {
   id: number;
   title: string;
+  cost?: number;
+  totalcost?: number;
   source?: string;
   detail: string;
   date?: string;
@@ -184,8 +186,131 @@ const deviceMap: Record<string, DeviceInfo> = {
       "Power: 65W Adapter",
     ],
   },
-
-  // เพิ่มเครื่องอื่น ๆ ได้ในโครงสร้างเดียวกัน
+  "OBOM-CNC-010": {
+    name: "",
+    department: "CNC",
+    owner: "",
+    imgurl: "/Employee/default.png",
+    employeeId: "",
+    spec: [
+      "CPU: Pentium G3250",
+      "Mainboard: H81M-CS",
+      "RAM: DDR4 4GB 800MHz",
+      "VGA: -",
+      "Power: -",
+    ],
+  },
+  "OBOM-ASY-011": {
+    name: "สาธิต (บาย)",
+    department: "CMM",
+    owner: "บิงขุนทด",
+    imgurl: "/Employee/056.png",
+    employeeId: "056",
+    spec: [
+      "CPU: Intel Core i7-8750H",
+      "Mainboard: 075F7T",
+      "RAM: DDR4 8GB 800MHz",
+      "VGA: UHD Graphics 630",
+      "Power: 65W Adapter",
+    ],
+    repairs: [
+      {
+        id: 1,
+        title: "เปลี่ยนเเบต",
+        detail:
+          "เปลี่ยนเเบตเพื่อแก้ไขปัญหาการใช้งานที่ไม่ยาวนานหลังจากถอดสายชาร์จ",
+        cost: 1250,
+        source: "ซ่อมภายใน",
+        date: "15-05-25",
+      },
+    ],
+  },
+  "OBOM-UA-012": {
+    name: "",
+    department: "",
+    owner: "",
+    imgurl: "/Employee/default.png",
+    employeeId: "",
+    spec: [
+      "CPU: Intel i5-13420H",
+      "Mainboard: 8BB2",
+      "RAM: DDR4 16GB 3200MHz",
+      "VGA: NVIDIA GeForce RTX 2050 6GB",
+      "Power: Notebook Adapter",
+      "OS: Windows 11",
+      "Type: Notebook",
+    ],
+  },
+  "ASSY-UA-013": {
+    name: "",
+    department: "",
+    owner: "",
+    imgurl: "/Employee/default.png",
+    employeeId: "",
+    spec: [
+      "CPU: Intel Core i3-4005U",
+      "Mainboard: -",
+      "RAM: 4GB DDR3L",
+      "VGA: Intel HD Graphics 4400",
+      "Power: 65W Adapter",
+    ],
+  },
+  "OBOM-QC-014": {
+    name: "QC 1",
+    department: "QC",
+    owner: "",
+    imgurl: "/Employee/default.png",
+    employeeId: "014",
+    spec: [
+      "CPU: Intel Xeon W-2123",
+      "Mainboard: 81C5HP",
+      "RAM: 64GB DDR4 2666MHz",
+      "VGA: NVIDIA Quadro P2000",
+      "Power: -",
+    ],
+  },
+  "OBOM-QC-015": {
+    name: "QC 2",
+    department: "QC",
+    owner: "",
+    imgurl: "/Employee/default.png",
+    employeeId: "",
+    spec: [
+      "CPU: Intel Core i5-6400",
+      "Mainboard: B250M Pro4",
+      "RAM: 8GB DDR4 2133MHz",
+      "VGA: NVIDIA GT 730",
+      "Power: -",
+    ],
+  },
+  "OBOM-QC-016": {
+    name: "QC 3",
+    department: "QC",
+    owner: "",
+    imgurl: "/Employee/default.png",
+    employeeId: "",
+    spec: [
+      "CPU: Intel Xeon E3-1240 v3",
+      "Mainboard: 1905 Hewlett",
+      "RAM: 8GB DDR3 800MHz",
+      "VGA: NVIDIA Quadro K600",
+      "Power: -",
+    ],
+  },
+  "OBOM-QC-017": {
+    name: "QC 4",
+    department: "QC",
+    owner: "",
+    imgurl: "/Employee/default.png",
+    employeeId: "",
+    spec: [
+      "CPU: Intel Core i7-7700",
+      "Mainboard: -",
+      "RAM: -",
+      "VGA: NVIDIA Quadro P620",
+      "Power: -",
+    ],
+  },
 };
 function getDeviceBySpecId(
   specId: string | string[] | undefined
@@ -312,29 +437,50 @@ export default function DevicePage() {
               {!device.repairs || device.repairs.length === 0 ? (
                 <p>ยังไม่มีประวัติการซ่อม</p>
               ) : (
-                <ul className="list-inside mt-2 text-left">
-                  {device.repairs.map(({ id, title, detail, source, date }) => (
-                    <li key={id} className="mb-3 cursor-pointer">
-                      <div
-                        onClick={() => toggleRepairExpand(id)}
-                        className="flex justify-between items-center p-2 bg-gray-100 rounded"
-                      >
-                        <span className="text-sm">{title}</span>
-                        <p className="text-green-500">{source}</p>
+                <>
+                  <ul className="list-inside mt-2 text-left">
+                    {device.repairs.map(
+                      ({ id, title, detail, source, date, cost }) => (
+                        <li key={id} className="mb-3 cursor-pointer">
+                          <div
+                            onClick={() => toggleRepairExpand(id)}
+                            className="flex justify-between items-center p-2 bg-gray-100 rounded"
+                          >
+                            <span className="text-sm">{title}</span>
+                            <p className="text-green-500">{source}</p>
 
-                        <span>{expandedRepairs.includes(id) ? "▲" : "▼"}</span>
-                      </div>
-                      {expandedRepairs.includes(id) && (
-                        <div>
-                          <p className="mt-1 px-3 text-gray-700">{detail}</p>
-                          <p className="bg-orange-400/70 w-fit rounded-full mt-1 px-3 text-white font-semibold">
-                            {date}
-                          </p>
-                        </div>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+                            <span>
+                              {expandedRepairs.includes(id) ? "▲" : "▼"}
+                            </span>
+                          </div>
+                          {expandedRepairs.includes(id) && (
+                            <div>
+                              <p className="mt-1 px-3 text-gray-700">
+                                {detail}
+                              </p>
+                              <div className="flex gap-5">
+                                <p className="bg-orange-400/70 w-fit rounded-full mt-1 px-3 text-white font-semibold">
+                                  {date}
+                                </p>
+                                <p className="bg-green-400/70 w-fit rounded-full mt-1 px-3 text-white font-semibold">
+                                  {cost ?? "-"} .-
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </li>
+                      )
+                    )}
+                  </ul>
+                  {/* แสดงผลรวมราคาทั้งหมด */}
+                  <div className="mt-4 p-3 bg-blue-100 rounded text-right font-semibold text-blue-700">
+                    รวมราคาซ่อมทั้งหมด:{" "}
+                    {device.repairs
+                      .reduce((sum, r) => sum + (r.cost ?? 0), 0)
+                      .toLocaleString()}{" "}
+                    บาท
+                  </div>
+                </>
               )}
             </div>
           )}
