@@ -184,13 +184,13 @@ export default function DevicePage() {
       style={{ backgroundImage: 'url("/bg.png")' }}
       className="flex flex-col justify-center font-sans items-center min-h-screen p-8 pb-20 gap-4 sm:p-20"
     >
-      <Image
+      {/* <Image
         className="absolute top-5 left-3"
         src={"/Logo.png"}
         width={100}
         height={100}
         alt={""}
-      />
+      /> */}
       <div className="p-10 w-90 h-fit bg-white justify-center items-center border border-blue-400 rounded-xl shadow-2xl max-w-xl">
         <h2 className="text-xl font-semibold mb-10">ID: {params.specId}</h2>
         {/* Tab Menu */}
