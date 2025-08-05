@@ -3,6 +3,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type DeviceInfo = {
   name: string;
@@ -19,6 +20,7 @@ type RepairItem = {
   title: string;
   source?: string;
   detail: string;
+  date?: string;
 };
 
 // const olddeviceMap: Record<string, string> = {
@@ -86,17 +88,10 @@ const deviceMap: Record<string, DeviceInfo> = {
     repairs: [
       {
         id: 1,
-        title: "เปลี่ยนฮาร์ดดิสก์",
-        detail: "เปลี่ยน HDD จาก 500GB เป็น SSD 1TB เนื่องจาก HDD เสียและช้า",
-        source: "ซ่อมภายนอก",
-      },
-      {
-        id: 2,
-        title: "อัพเดตไดรเวอร์การ์ดจอ",
-
-        detail:
-          "อัพเดตไดรเวอร์ NVIDIA เพื่อแก้ปัญหาการแสดงผลกระตุกในโปรแกรมออกแบบ",
+        title: "เปลี่ยนการ์ดจอ",
+        detail: "เปลี่ยนการ์ดจอเพื่อแก้ปัญหาอาการกระตุกในระหว่างการทำงาน",
         source: "ซ่อมภายใน",
+        date: "15-05-25",
       },
     ],
   },
@@ -199,84 +194,117 @@ export default function DevicePage() {
       <div className="p-10 w-90 h-fit bg-white justify-center items-center border border-blue-400 rounded-xl shadow-2xl max-w-xl">
         <h2 className="text-xl font-semibold mb-10">ID: {params.specId}</h2>
         {/* Tab Menu */}
-        <div className="flex justify-center gap-10 mb-6 border-b border-gray-300">
+        <div className="flex justify-center gap-10 mb-6 border-b border-gray-300 relative">
           <button
             onClick={() => setActiveTab("info")}
-            className={`py-2 px-4 ${
+            className={`relative py-2 px-4 ${
               activeTab === "info"
-                ? "border-b-4 border-blue-600 font-semibold"
+                ? "text-blue-600 font-semibold"
                 : "text-gray-600"
             }`}
           >
             ข้อมูลเครื่อง
+            {activeTab === "info" && (
+              <motion.div
+                layoutId="underline"
+                className="absolute left-0 bottom-0 h-1 w-full bg-blue-600 rounded-t-md"
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
           </button>
+
           <button
             onClick={() => setActiveTab("repairs")}
-            className={`py-2 px-4 ${
+            className={`relative py-2 px-4 ${
               activeTab === "repairs"
-                ? "border-b-4 border-blue-600 font-semibold"
+                ? "text-blue-600 font-semibold"
                 : "text-gray-600"
             }`}
           >
             รายการซ่อม
+            {activeTab === "repairs" && (
+              <motion.div
+                layoutId="underline"
+                className="absolute left-0 bottom-0 h-1 w-full bg-blue-600 rounded-t-md"
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
           </button>
         </div>
-
-        {activeTab === "info" && (
-          <>
-            <div className="flex gap-5 mb-15">
+        <AnimatePresence mode="wait">
+          {activeTab === "info" && (
+            <motion.div
+              key="info"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="flex gap-5 mb-15">
+                <div>
+                  <Image
+                    src={device.imgurl}
+                    width={100}
+                    height={100}
+                    alt={""}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <h1>ผู้ดูแล: {device.name}</h1>
+                  <p>แผนก: {device.department}</p>
+                  <p>รหัสพนักงาน: {device.employeeId}</p>
+                </div>
+              </div>
               <div>
-                <Image src={device.imgurl} width={100} height={100} alt={""} />
+                <div className="flex items-center gap-1">
+                  <Icon
+                    icon="famicons:hardware-chip-outline"
+                    width="25"
+                    height="25"
+                  />
+                  <p>สเปค:</p>
+                </div>
+                <ul className="list-disc list-inside mt-2 text-left">
+                  {device.spec.map((line, index) => (
+                    <li key={index}>{line}</li>
+                  ))}
+                </ul>
               </div>
-              <div className="flex flex-col gap-2">
-                <h1>ผู้ดูแล: {device.name}</h1>
-                <p>แผนก: {device.department}</p>
-                <p>รหัสพนักงาน: {device.employeeId}</p>
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center gap-1">
-                <Icon
-                  icon="famicons:hardware-chip-outline"
-                  width="25"
-                  height="25"
-                />
-                <p>สเปค:</p>
-              </div>
-              <ul className="list-disc list-inside mt-2 text-left">
-                {device.spec.map((line, index) => (
-                  <li key={index}>{line}</li>
-                ))}
-              </ul>
-            </div>
-          </>
-        )}
+            </motion.div>
+          )}
 
-        {activeTab === "repairs" && (
-          <div>
-            {!device.repairs || device.repairs.length === 0 ? (
-              <p>ยังไม่มีประวัติการซ่อม</p>
-            ) : (
-              <ul className="list-disc list-inside mt-2 text-left">
-                {device.repairs.map(({ id, title, detail, source }) => (
-                  <li key={id} className="mb-3 cursor-pointer">
-                    <div
-                      onClick={() => toggleRepairExpand(id)}
-                      className="flex justify-between items-center p-2 bg-gray-100 rounded"
-                    >
-                      <span>{title}</span>
-                      <p className="text-green-500">{source}</p>
-                      <span>{expandedRepairs.includes(id) ? "▲" : "▼"}</span>
-                    </div>
-                    {expandedRepairs.includes(id) && (
-                      <p className="mt-1 px-3 text-gray-700">{detail}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
+          {activeTab === "repairs" && (
+            <div>
+              {!device.repairs || device.repairs.length === 0 ? (
+                <p>ยังไม่มีประวัติการซ่อม</p>
+              ) : (
+                <ul className="list-inside mt-2 text-left">
+                  {device.repairs.map(({ id, title, detail, source, date }) => (
+                    <li key={id} className="mb-3 cursor-pointer">
+                      <div
+                        onClick={() => toggleRepairExpand(id)}
+                        className="flex justify-between items-center p-2 bg-gray-100 rounded"
+                      >
+                        <span className="text-sm">{title}</span>
+                        <p className="text-green-500">{source}</p>
+
+                        <span>{expandedRepairs.includes(id) ? "▲" : "▼"}</span>
+                      </div>
+                      {expandedRepairs.includes(id) && (
+                        <div>
+                          <p className="mt-1 px-3 text-gray-700">{detail}</p>
+                          <p className="bg-orange-400/70 w-fit rounded-full mt-1 px-3 text-white font-semibold">
+                            {date}
+                          </p>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
