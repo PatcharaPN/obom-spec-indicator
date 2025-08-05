@@ -2,6 +2,8 @@
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
+import { useState } from "react";
+
 type DeviceInfo = {
   name: string;
   department: string;
@@ -9,6 +11,14 @@ type DeviceInfo = {
   imgurl: string;
   employeeId: string;
   spec: string[];
+  repairs?: RepairItem[];
+};
+
+type RepairItem = {
+  id: number;
+  title: string;
+  source?: string;
+  detail: string;
 };
 
 // const olddeviceMap: Record<string, string> = {
@@ -73,6 +83,22 @@ const deviceMap: Record<string, DeviceInfo> = {
       "VGA: NVIDIA Quadro T1000",
       "Power: 650W",
     ],
+    repairs: [
+      {
+        id: 1,
+        title: "เปลี่ยนฮาร์ดดิสก์",
+        detail: "เปลี่ยน HDD จาก 500GB เป็น SSD 1TB เนื่องจาก HDD เสียและช้า",
+        source: "ซ่อมภายนอก",
+      },
+      {
+        id: 2,
+        title: "อัพเดตไดรเวอร์การ์ดจอ",
+
+        detail:
+          "อัพเดตไดรเวอร์ NVIDIA เพื่อแก้ปัญหาการแสดงผลกระตุกในโปรแกรมออกแบบ",
+        source: "ซ่อมภายใน",
+      },
+    ],
   },
   "OBOM-DS-004": {
     name: "ชยิน (จิ๋ว)",
@@ -116,6 +142,19 @@ const deviceMap: Record<string, DeviceInfo> = {
       "Power: 550W",
     ],
   },
+  "OBOM-SV-007": {
+    name: "พัชรพล พันธุ์แน่น",
+    department: "Server",
+    owner: "พันธุ์แน่น",
+    imgurl: "/Employee/055.png",
+    employeeId: "055",
+    spec: [
+      "CPU: Intel i5-7400 (4) @ 3.500GHz",
+      "RAM: 8GB",
+      "VGA: NVIDIA GeForce GT 730",
+      "OS: Ubuntu 24.04.2 LTS x86_64",
+    ],
+  },
 
   // เพิ่มเครื่องอื่น ๆ ได้ในโครงสร้างเดียวกัน
 };
@@ -132,14 +171,23 @@ export default function DevicePage() {
   const params = useParams();
   const device = getDeviceBySpecId(params.specId);
 
+  const [activeTab, setActiveTab] = useState<"info" | "repairs">("info");
+  const [expandedRepairs, setExpandedRepairs] = useState<number[]>([]);
+
   if (!device) {
     return <div>ไม่พบข้อมูลอุปกรณ์</div>;
   }
-
+  function toggleRepairExpand(id: number) {
+    if (expandedRepairs.includes(id)) {
+      setExpandedRepairs(expandedRepairs.filter((rid) => rid !== id));
+    } else {
+      setExpandedRepairs([...expandedRepairs, id]);
+    }
+  }
   return (
     <div
       style={{ backgroundImage: 'url("/bg.png")' }}
-      className="flex justify-center font-sans items-center  min-h-screen p-8 pb-20 gap-4 sm:p-20 "
+      className="flex flex-col justify-center font-sans items-center min-h-screen p-8 pb-20 gap-4 sm:p-20"
     >
       <Image
         className="absolute top-5 left-3"
@@ -148,35 +196,87 @@ export default function DevicePage() {
         height={100}
         alt={""}
       />
-      <div className="p-10 w-90 h-fit bg-white justify-center items-center border border-blue-400 rounded-xl shadow-2xl">
-        <h2 className="text-xl font-semibold mb-10">ID: {params.specId}</h2>{" "}
-        <div className="flex gap-5 mb-15">
+      <div className="p-10 w-90 h-fit bg-white justify-center items-center border border-blue-400 rounded-xl shadow-2xl max-w-xl">
+        <h2 className="text-xl font-semibold mb-10">ID: {params.specId}</h2>
+        {/* Tab Menu */}
+        <div className="flex justify-center gap-10 mb-6 border-b border-gray-300">
+          <button
+            onClick={() => setActiveTab("info")}
+            className={`py-2 px-4 ${
+              activeTab === "info"
+                ? "border-b-4 border-blue-600 font-semibold"
+                : "text-gray-600"
+            }`}
+          >
+            ข้อมูลเครื่อง
+          </button>
+          <button
+            onClick={() => setActiveTab("repairs")}
+            className={`py-2 px-4 ${
+              activeTab === "repairs"
+                ? "border-b-4 border-blue-600 font-semibold"
+                : "text-gray-600"
+            }`}
+          >
+            รายการซ่อม
+          </button>
+        </div>
+
+        {activeTab === "info" && (
+          <>
+            <div className="flex gap-5 mb-15">
+              <div>
+                <Image src={device.imgurl} width={100} height={100} alt={""} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <h1>ผู้ดูแล: {device.name}</h1>
+                <p>แผนก: {device.department}</p>
+                <p>รหัสพนักงาน: {device.employeeId}</p>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-1">
+                <Icon
+                  icon="famicons:hardware-chip-outline"
+                  width="25"
+                  height="25"
+                />
+                <p>สเปค:</p>
+              </div>
+              <ul className="list-disc list-inside mt-2 text-left">
+                {device.spec.map((line, index) => (
+                  <li key={index}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          </>
+        )}
+
+        {activeTab === "repairs" && (
           <div>
-            <Image src={device.imgurl} width={100} height={100} alt={""} />
+            {!device.repairs || device.repairs.length === 0 ? (
+              <p>ยังไม่มีประวัติการซ่อม</p>
+            ) : (
+              <ul className="list-disc list-inside mt-2 text-left">
+                {device.repairs.map(({ id, title, detail, source }) => (
+                  <li key={id} className="mb-3 cursor-pointer">
+                    <div
+                      onClick={() => toggleRepairExpand(id)}
+                      className="flex justify-between items-center p-2 bg-gray-100 rounded"
+                    >
+                      <span>{title}</span>
+                      <p className="text-green-500">{source}</p>
+                      <span>{expandedRepairs.includes(id) ? "▲" : "▼"}</span>
+                    </div>
+                    {expandedRepairs.includes(id) && (
+                      <p className="mt-1 px-3 text-gray-700">{detail}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          <div className="flex flex-col gap-2">
-            <h1>ผู้ดูแล: {device.name}</h1>
-            <p>แผนก: {device.department}</p>
-            <p>รหัสพนักงาน: {device.employeeId}</p>
-          </div>
-        </div>
-        <div>
-          {" "}
-          <div className="flex items-center gap-1">
-            {" "}
-            <Icon
-              icon="famicons:hardware-chip-outline"
-              width="25"
-              height="25"
-            />
-            <p>สเปค:</p>
-          </div>
-          <ul className="list-disc list-inside mt-2 text-left">
-            {device.spec.map((line, index) => (
-              <li key={index}>{line}</li>
-            ))}
-          </ul>
-        </div>
+        )}
       </div>
     </div>
   );
