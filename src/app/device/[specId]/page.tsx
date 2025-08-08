@@ -472,6 +472,24 @@ const deviceMap: Record<string, DeviceInfo> = {
       "ไม่มี Wi-Fi / ไม่มีถาด ADF",
     ],
   },
+  "OBOM-QC-026": {
+    name: "เครื่อง QC Station 2",
+    department: "QC",
+    owner: "",
+    imgurl: "/Devices/i3-13100-PC.jpg",
+    employeeId: "",
+    spec: [
+      "CPU: Intel Core i3-13100 (13th Gen, 4C/8T, up to 4.5GHz)",
+      "Mainboard: Intel H610 Chipset",
+      "RAM: 8GB DDR4 3200MHz",
+      "Storage: SSD 512GB NVMe",
+      "Graphics: Integrated Intel UHD 730",
+      "Power Supply: 500W",
+
+      "ระบบปฏิบัติการ: Windows 11 Pro 64-bit",
+      "จอภาพ: 23.8 นิ้ว FHD IPS",
+    ],
+  },
 };
 function getDeviceBySpecId(
   specId: string | string[] | undefined
