@@ -476,7 +476,7 @@ const deviceMap: Record<string, DeviceInfo> = {
     name: "เครื่อง QC Station 2",
     department: "QC",
     owner: "",
-    imgurl: "/Devices/default.jpg",
+    imgurl: "/Devices/default.png",
     employeeId: "",
     spec: [
       "CPU: Intel Core i3-13100 (13th Gen, 4C/8T, up to 4.5GHz)",
